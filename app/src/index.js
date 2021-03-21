@@ -1,5 +1,6 @@
 import Web3 from "web3";
 import starNotaryArtifact from "../../build/contracts/StarNotary.json";
+import detectEthereumProvider from '@metamask/detect-provider';
 
 const App = {
   web3: null,
@@ -22,7 +23,8 @@ const App = {
       const accounts = await web3.eth.getAccounts();
       this.account = accounts[0];
 
-      // this.refreshBalance();
+       this.refreshBalance();
+       this.getStarsForSale();
     } catch (error) {
       console.error("Could not connect to contract or chain.");
     }
@@ -131,7 +133,7 @@ const App = {
 
 window.App = App;
 
-window.addEventListener("load", function() {
+window.addEventListener("load", async function() {
   if (window.ethereum) {
     // use MetaMask's provider
     App.web3 = new Web3(window.ethereum);
@@ -145,9 +147,13 @@ window.addEventListener("load", function() {
       new Web3.providers.HttpProvider("http://127.0.0.1:8545"),
     );
   }
-  
-  App.start().then(() => {
-    App.refreshBalance();
-    App.getStarsForSale();
-  });
+  const provider = await detectEthereumProvider();
+      if (provider) {
+        // From now on, this should always be true:
+        // provider === window.ethereum
+        App.start(); // initialize your app
+      } else {
+        const metamaskFail = document.getElementById('connectToMetaMask');
+        metamaskFail.innerHTML = '<p class="text-center display-6 p-5 bg-danger text-white">Please install MetaMask!</p>';
+      }
 });
