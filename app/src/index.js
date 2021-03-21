@@ -13,7 +13,10 @@ const App = {
     try {
       // get contract instance
       const networkId = await web3.eth.net.getId();
+      console.log(networkId)
+      console.log(starNotaryArtifact)
       const deployedNetwork = starNotaryArtifact.networks[networkId];
+      console.log(deployedNetwork)
       this.meta = new web3.eth.Contract(
         starNotaryArtifact.abi,
         deployedNetwork.address,
@@ -22,6 +25,7 @@ const App = {
       // get accounts
       const accounts = await web3.eth.getAccounts();
       this.account = accounts[0];
+      console.log(this.account)
 
        this.refreshBalance();
        this.getStarsForSale();
