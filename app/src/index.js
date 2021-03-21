@@ -28,37 +28,104 @@ const App = {
     }
   },
 
-  // refreshBalance: async function() {
-  //   const { getBalance } = this.meta.methods;
-  //   const balance = await getBalance(this.account).call();
+  //this function updates the stars the owner has and prints it in the DOM
+  // it checks if the star is up for sale and builds the DOM accordingly
+  refreshBalance: async function() {
+    const { 
+      balanceOf, 
+      tokenOfOwnerByIndex,
+      starsForSale,
+      lookUptokenIdToStarInfo } = this.meta.methods;
+    const balance = await balanceOf(this.account).call();
+    const ownedStarsDOM = document.getElementById('ownedStars');
+    ownedStarsDOM.innerHTML = `<p class="fs-2 fw-light p-2">Stars Owned by You:</p>`;
 
-  //   const balanceElement = document.getElementsByClassName("balance")[0];
-  //   balanceElement.innerHTML = balance;
-  // },
+    for (let i = 0; i < balance; i++) {
+      let id = await tokenOfOwnerByIndex(this.account, i).call();
+      let name = await lookUptokenIdToStarInfo(id).call();
+      let sellingFor = await starsForSale(id).call();
+      ownedStarsDOM.innerHTML += `<div class="rounded-3 star-owned bg-secondary text-white lh-1 m-3 p-2"><p class="fw-light">Id: <span class="fw-bold">${id}</span></p>
+      <p class="fw-light">Name: <span class="fw-bold">${name}</span></p>
+      <span class="sell-badge badge bg-dark" role="button" onclick="App.showInput(${id}, ${i})">Sell for ...</span></div>`
 
-  // sendCoin: async function() {
-  //   const amount = parseInt(document.getElementById("amount").value);
-  //   const receiver = document.getElementById("receiver").value;
+      let starDiv = document.getElementsByClassName("star-owned")[i];
 
-  //   this.setStatus("Initiating transaction... (please wait)");
+      if(sellingFor > 0) {
+        let sellingForEth = this.web3.utils.fromWei(sellingFor, 'ether');
+        document.getElementsByClassName('sell-badge')[i].style.display = "none";
+        starDiv.innerHTML += `<span class="badge rounded-pill bg-warning text-dark">Selling for: ${sellingForEth} ETH</span>`      }
+    }
+  },
+  // helper function that shows the input if we click on sell badge
+  showInput: function(id, i) {
+    let starDiv = document.getElementsByClassName("star-owned")[i];
 
-  //   const { sendCoin } = this.meta.methods;
-  //   await sendCoin(receiver, amount).send({ from: this.account });
+    document.getElementsByClassName('sell-badge')[i].style.display = "none";
+    starDiv.innerHTML += `<div class="input-group">
+    <span class="input-group-text badge bg-danger" role="button" onclick="App.putStarForSale(${id}, ${i})">SELL</span>
+    <input id="sell-input-${i}" type="number" min="0" max="100" class="popup-input form-control"></input></div>`
+  },
+  // this function is letting us put the star up for sale
+  putStarForSale: async function(id, i) {
+    const { putStarUpForSale } = this.meta.methods;
+    let sellPriceEth = document.getElementById('sell-input-' + i).value;
+    let sellPrice = this.web3.utils.toWei(sellPriceEth, 'ether');
 
-  //   this.setStatus("Transaction complete!");
-  //   this.refreshBalance();
-  // },
+    await putStarUpForSale(id, sellPrice).send({from: this.account});
+    this.refreshBalance();
+  },
 
   setStatus: function(message) {
     const status = document.getElementById("status");
     status.innerHTML = message;
   },
+
+  // added refreshBalance function inside to update the DOM
   createStar: async function() {
     const { createStar } = this.meta.methods;
     const name = document.getElementById("starName").value;
     const id = document.getElementById("starId").value;
     await createStar(name, id).send({from: this.account});
+    this.refreshBalance();
     App.setStatus("New Star Owner is " + this.account + ".");
+  },
+
+  // this function searches for stars that are on sale and then adds them to our DOM
+  getStarsForSale: async function() {
+    const { starsForSale, totalSupply, tokenByIndex, ownerOf } = this.meta.methods;
+    const supply = await totalSupply().call();
+    
+    const starsForSaleDOM = document.getElementById('starsForSale');
+    starsForSaleDOM.innerHTML = '';
+
+    for (let i = 0; i < supply; i++) {
+      let id = await tokenByIndex(i).call()
+      let price = await starsForSale(id).call();
+      let priceEth = this.web3.utils.fromWei(price, 'ether');
+      let starOwner = await ownerOf(id).call()
+      if(price > 0 && starOwner !== this.account){
+        starsForSaleDOM.innerHTML += `<div class="rounded-circle bg-dark w-25 p-5 m-1 lh-1 text-white" style="min-width: 180px; max-width: 185px;">
+            <p style="margin-bottom: 8px;">Id: ${id}</p>
+            <p style="margin-bottom: 8px;">Buy for: ${priceEth}</p>
+            <span class="sell-badge badge bg-success" role="button" onclick="App.buyStarFunc(${id}, ${price})">BUY</span>
+            <span class="sell-badge badge bg-white text-dark" role="button" onclick="App.lookUp(${id})">i</span>
+          </div>`
+      }
+    }
+  },
+  // function to show the info of the star
+  lookUp: async function(id) {
+    const { lookUptokenIdToStarInfo } = this.meta.methods;
+    let name = await lookUptokenIdToStarInfo(id).call();
+    const status = document.getElementById("status");
+    status.innerHTML = "The name of the star with Id of " + id + " is " + name + '.';
+  },
+  // function that lets users buy stars that are up for sale
+  buyStarFunc: async function(id, price) {
+    const { buyStar } = this.meta.methods;
+    await buyStar(id).send({from: this.account, value: price});
+    this.refreshBalance();
+    this.getStarsForSale();
   }
 };
 
@@ -78,6 +145,9 @@ window.addEventListener("load", function() {
       new Web3.providers.HttpProvider("http://127.0.0.1:8545"),
     );
   }
-
-  App.start();
+  
+  App.start().then(() => {
+    App.refreshBalance();
+    App.getStarsForSale();
+  });
 });

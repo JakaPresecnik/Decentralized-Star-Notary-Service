@@ -2,29 +2,54 @@
 <html>
   <head>
     <title>StarNotary DApp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
   </head>
   <style>
     input {
       display: block;
       margin-bottom: 12px;
     }
+    .popup-input {
+      margin-bottom: 0;
+    }
+    .row {
+      --bs-gutter-x: 0;
+    }
   </style>
   <body>
-    <h1>StarNotary Token DAPP</h1>
+    <div class="p-4 p-md-5 text-white bg-dark">
+      <h1 class="display-4">StarNotary Token DAPP</h1>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-lg-2 bg-light text-center" id="ownedStars">
+      </div>
+      <div class="col-md-9 p-2">
+        <div class="jumbotron p-3 p-md-3">
+          <h3 class="p-2 mb-4 fst-italic border-bottom">Create a Star</h3>
+          <div class="bg-secondary text-white rounded p-3 p-md-5">
+            <label for="starName" class="form-label">Star Name:</label>
+            <input type="text" id="starName" class="form-control"></input>
+            <label for="starId" class="form-label">Star ID:</label>
+            <input type="text" id="starId" class="form-control"></input>
+            <button id="createStar" onclick="App.createStar()" class="btn btn-outline-light">Create Star</button>
+          </div>
+          <h3 class="p-2 mb-4 mt-4 fst-italic border-bottom">Stars for Sale</h3>
+          <div class="row text-center" id="starsForSale">
+            
+          </div>
+        </div>
 
-  <hr>
+        <span id="status"></span>
 
-  <br>
-    <h1>Create a Star</h1>
-    <br><label for="starName">Star Name:</label><input type="text" id="starName"></input>
-    <br><label for="starId">Star ID:</label><input type="text" id="starId"></input>
-    <br><br><button id="createStar" onclick="App.createStar()">Create Star</button>
-    <br><br>
-    <br>
-
-    <span id="status"></span>
-
-    <br>
-    <script src="index.js"></script>
+        <br>
+        <script src="index.js"></script>
+      </div>
+    </div>
+    <footer class="text-muted py-5 text-center bg-light">
+      <p>Built by Jaka Presečnik</p>
+      <p>The html page is a bit bad, but the idea here is learning blockchain, not building an awsome front-end :)</p>
+    </footer>
   </body>
 </html>

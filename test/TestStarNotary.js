@@ -77,5 +77,69 @@ it ('lets user2 buy a star and decreases its balance in ether', async () => {
     let value1 = Number(balanceOfUser2BeforeTransaction) - Number(starPrice);
     let value2 = Number(balanceOfUser2AfterTransaction);
     assert.equal(value1, value2);
+});
+
+it ('can add the token name and token symbol properly', async() => {
+    let instance = await StarNotary.deployed();
+    const givenName = 'StarToken';
+    const givenSymbol = 'STK';
+
+    let tokenSymbol = await instance.symbol();
+    let tokenName = await instance.name();
+    assert.equal(givenName, tokenName);
+    assert.equal(givenSymbol, tokenSymbol);
+});
+
+it('receives the correct name of the star for a given id', async() => {
+    let instance = await StarNotary.deployed();
+    let tokenId = 6;
+    let starName = 'Test Name of The Star';
+    await instance.createStar(starName, tokenId, {from: accounts[0]});
+
+    let savedStarName = await instance.lookUptokenIdToStarInfo(tokenId);
+    assert.equal(starName, savedStarName);
+});
+
+it('can propose the star to be exchanged', async() => {
+    let instance = await StarNotary.deployed();
+    let user1 = accounts[1];
+    let tokenId1 = 7;
+    let starName1 = 'User1 star';
+    await instance.createStar(starName1, tokenId1, {from: user1});
+    let user2 = accounts[2];
+    let tokenId2 = 8;
+    let starName2 ='User2 star';
+    await instance.createStar(starName2, tokenId2, {from: user2});
+
+    await instance.proposeExchangeStars(tokenId1, tokenId2, {from: user1});
+    assert.equal(await instance.getStarsForExchange.call(user2, tokenId2), tokenId1);
+});
+
+it('lets 2 users exchange stars', async() => {
+    let instance = await StarNotary.deployed();
+    let user1 = accounts[1];
+    let tokenId1 = 9;
+    let starName1 = 'User1 star';
+    await instance.createStar(starName1, tokenId1, {from: user1});
+    let user2 = accounts[2];
+    let tokenId2 = 10;
+    let starName2 ='User2 star';
+    await instance.createStar(starName2, tokenId2, {from: user2});
+
+    await instance.proposeExchangeStars(tokenId1, tokenId2, {from: user1});
+    await instance.exchangeStars(tokenId2, tokenId1, {from: user2});
+    assert.equal(await instance.ownerOf.call(tokenId1), user2);
+    assert.equal(await instance.ownerOf.call(tokenId2), user1);
+});
+
+it('lets a user transfer a star', async () => {
+    let instance = await StarNotary.deployed();
+    let userFrom = accounts[1];
+    let starId = 11;
+    let starName = 'Transfered star';
+    await instance.createStar(starName, starId, {from: userFrom});
+    let userTo = accounts[2];
+    await instance.transferStar(userTo, starId, {from: userFrom});
+    assert.equal(await instance.ownerOf.call(starId), userTo);
 })
 
