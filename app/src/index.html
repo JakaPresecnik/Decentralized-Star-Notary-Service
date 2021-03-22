@@ -35,9 +35,11 @@
             <input type="text" id="starId" class="form-control"></input>
             <button id="createStar" onclick="App.createStar()" class="btn btn-outline-light">Create Star</button>
           </div>
-          <h3 class="p-2 mb-4 mt-4 fst-italic border-bottom">Stars for Sale</h3>
+          <h3 class="p-2 mb-4 mt-4 fst-italic border-bottom">Look up a star</h3>
           <div class="row text-center" id="starsForSale">
-            
+            <label for="lookStarId" class="form-label">Star Id:</label>
+            <input type="text" id="lookStarId" class="form-control"></input>
+            <button id="lookForStar" onclick="App.lookUp()" class="btn btn-dark">Look up</button>
           </div>
         </div>
 

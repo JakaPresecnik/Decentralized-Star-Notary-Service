@@ -16,17 +16,17 @@ Migrations dry-run (simulation)
 
    Deploying 'Migrations'
    ----------------------
-   > block number:        8273235
-   > block timestamp:     1616331781
+   > block number:        8278415
+   > block timestamp:     1616409488
    > account:             0x815C348B43BDeEd9A75e472097773EEE5719cC4b
-   > balance:             7.427667231
-   > gas used:            149391 (0x2478f)
+   > balance:             7.39204442
+   > gas used:            147231 (0x23f1f)
    > gas price:           10 gwei
    > value sent:          0 ETH
-   > total cost:          0.00149391 ETH
+   > total cost:          0.00147231 ETH
 
    -------------------------------------
-   > Total cost:          0.00149391 ETH
+   > Total cost:          0.00147231 ETH
 
 
 2_deploy_contracts.js
@@ -34,23 +34,23 @@ Migrations dry-run (simulation)
 
    Deploying 'StarNotary'
    ----------------------
-   > block number:        8273237
-   > block timestamp:     1616331803
+   > block number:        8278417
+   > block timestamp:     1616409505
    > account:             0x815C348B43BDeEd9A75e472097773EEE5719cC4b
-   > balance:             7.395390691
-   > gas used:            3200313 (0x30d539)
+   > balance:             7.36674267
+   > gas used:            2502834 (0x2630b2)
    > gas price:           10 gwei
    > value sent:          0 ETH
-   > total cost:          0.03200313 ETH
+   > total cost:          0.02502834 ETH
 
    -------------------------------------
-   > Total cost:          0.03200313 ETH
+   > Total cost:          0.02502834 ETH
 
 
 Summary
 =======
 > Total deployments:   2
-> Final cost:          0.03349704 ETH
+> Final cost:          0.02650065 ETH
 
 
 
@@ -68,46 +68,50 @@ Starting migrations...
 
    Deploying 'Migrations'
    ----------------------
-   > transaction hash:    0x5946f1bb452d7bd262ae0886c6f86ba356553efdd9e50f0dab7f61339fabed83
+   > transaction hash:    0x9b810499c1bc1211efc51dfb4060bfc2142ab6a1b16b5df28382eca0518b63f3
    > Blocks: 0            Seconds: 4
-   > contract address:    0x2f157D8E852273Ac8635dbFd7426f7Bbaf9aFF3C
-   > block number:        8273237
-   > block timestamp:     1616331822
+   > contract address:    0x84D88569222659ddE13b7e122A7F1978B1cbbfc8
+   > block number:        8278416
+   > block timestamp:     1616409522
    > account:             0x815C348B43BDeEd9A75e472097773EEE5719cC4b
-   > balance:             7.427517231
-   > gas used:            164391 (0x28227)
+   > balance:             7.39189442
+   > gas used:            162231 (0x279b7)
    > gas price:           10 gwei
    > value sent:          0 ETH
-   > total cost:          0.00164391 ETH
-
-
-   > Saving migration to chain.
-   > Saving artifacts
-2_deploy_contracts.js
-=====================
-
-   Deploying 'StarNotary'
-   ----------------------
-   > transaction hash:    0x823bdeb12ec2c8d1c143acb529e370b45ed40ccdb7085f7070963985a1cc852c
-   > Blocks: 0            Seconds: 8
-   > contract address:    0x523fb02c079A669A4dB904e3Dfed2bE72f6261AE
-   > block number:        8273239
-   > block timestamp:     1616331852
-   > account:             0x815C348B43BDeEd9A75e472097773EEE5719cC4b
-   > balance:             7.394190691
-   > gas used:            3290313 (0x3234c9)
-   > gas price:           10 gwei
-   > value sent:          0 ETH
-   > total cost:          0.03290313 ETH
+   > total cost:          0.00162231 ETH
 
 
    > Saving migration to chain.
    > Saving artifacts
    -------------------------------------
-   > Total cost:          0.03290313 ETH
+   > Total cost:          0.00162231 ETH
+
+
+2_deploy_contracts.js
+=====================
+
+   Deploying 'StarNotary'
+   ----------------------
+   > transaction hash:    0x5d62d2eb92354659105f6422437359e3b80d1e9959e46d63b2b33f95c8568770
+   > Blocks: 0            Seconds: 8
+   > contract address:    0xd5bF8f0cEE9D233244334850A8D930Eb42D34f06
+   > block number:        8278418
+   > block timestamp:     1616409552
+   > account:             0x815C348B43BDeEd9A75e472097773EEE5719cC4b
+   > balance:             7.36584267
+   > gas used:            2562834 (0x271b12)
+   > gas price:           10 gwei
+   > value sent:          0 ETH
+   > total cost:          0.02562834 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.02562834 ETH
 
 
 Summary
 =======
 > Total deployments:   2
-> Final cost:          0.03454704 ETH
+> Final cost:          0.02725065 ETH

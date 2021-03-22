@@ -8,8 +8,14 @@ contract StarNotary is ERC721 {
     // Implemending a name and a symbol through constructor
     // the name and symbol is inserted in ../migrations/2_deploy_contracts.js
     // If there is another easier solution I will be very happy to know it :)
-    constructor(string memory name_, string memory symbol_) ERC721(name_, symbol_) public {}
-    
+    string public name;
+    string public symbol;
+
+    constructor(string memory _name, string memory _symbol) ERC721() public {
+        name = _name;
+        symbol = _symbol;
+    }
+
     // Star data
     struct Star {
         string name;
@@ -47,8 +53,8 @@ contract StarNotary is ERC721 {
         uint256 starCost = starsForSale[_tokenId];
         address starOwner = ownerOf(_tokenId);
         require(msg.value >= starCost, "You need to have enough Ether");
-        //'_transfer' used here instead of 'transfer' to avoid approval error
-        _transfer(starOwner, msg.sender, _tokenId);
+        //'_transferFrom' used here instead of 'transferFrom' to avoid approval error
+        _transferFrom(starOwner, msg.sender, _tokenId);
         address payable ownerAddressPayable = _make_payable(starOwner);
         ownerAddressPayable.transfer(starCost);
         // added a deletion from starsForSale mapping,i noticed 
@@ -85,13 +91,13 @@ contract StarNotary is ERC721 {
 
         address starOwner = ownerOf(_tokenId2);
         
-        _transfer(starOwner, msg.sender, _tokenId2);
-        _transfer(msg.sender, starOwner, _tokenId1);
+        _transferFrom(starOwner, msg.sender, _tokenId2);
+        _transferFrom(msg.sender, starOwner, _tokenId1);
     }
 
     // function that allows user to send his star to another user
     function transferStar(address _to1, uint256 _tokenId) public {
         require(msg.sender == ownerOf(_tokenId), "You are not the owner of the star.");
-        _transfer(msg.sender, _to1, _tokenId);
+        _transferFrom(msg.sender, _to1, _tokenId);
     }
 }
